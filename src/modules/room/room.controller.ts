@@ -1,20 +1,18 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { CreateRoomDto } from "./create-room.dto";
+import { CreateRoomDto } from "./dto/create-room.dto";
+import { RoomService } from "./room.service";
 
 @Controller("room")
 export class RoomController {
+    constructor(private readonly roomService: RoomService) {}
+
     @Post()
     async create(@Body() createRoomDto: CreateRoomDto) {
-        return `create room with name: ${createRoomDto.name}`;
+        return this.roomService.create(createRoomDto);
     }
 
     @Get()
     async getAll() {
-        return "get all rooms"
-    }
-
-    @Get(":name")
-    async getOne(@Param("name") name: string) {
-        return `get room with name: ${name}`
+        return this.roomService.findAll();
     }
 }
