@@ -1,14 +1,13 @@
-version: "3.9"
 services:
 
   backend:
     build:
-      context: .
+      context: backend
     networks:
       - server-side
       - client-side
     env_file:
-      - .env.backend
+      - backend/.env.backend
     environment:
       NODE_ENV: production
     ports:
