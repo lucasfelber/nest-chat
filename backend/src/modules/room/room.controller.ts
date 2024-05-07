@@ -6,11 +6,6 @@ import { RoomService } from "./room.service";
 export class RoomController {
     constructor(private readonly roomService: RoomService) {}
 
-    @Post()
-    async create(@Body() createRoomDto: CreateRoomDto) {
-        return this.roomService.create(createRoomDto);
-    }
-
     @Get()
     async getAll() {
         return this.roomService.findAll();

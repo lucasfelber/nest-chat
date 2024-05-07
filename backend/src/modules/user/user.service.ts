@@ -11,14 +11,16 @@ export class UserService {
         private readonly userRepository: Repository<User>,
     ) {}
 
-    async create(createUserDto: CreateUserDto): Promise<User> {
-        const user = new User();
-        user.name = createUserDto.name;
+    async save(createUserDto: CreateUserDto): Promise<User> {
+        let existing_user = await this.userRepository.findOneBy({name: createUserDto.name});
 
-        return this.userRepository.save(user);
-    }
+        if (!existing_user) {
+            const new_user = new User();
+            new_user.name = createUserDto.name;
 
-    async findById(id: number): Promise<User> {
-        return this.userRepository.findOneBy({id})
+            return this.userRepository.save(new_user);
+        } else {
+            return existing_user;
+        }
     }
 }

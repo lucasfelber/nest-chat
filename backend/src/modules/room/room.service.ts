@@ -11,18 +11,20 @@ export class RoomService {
         private readonly roomRepository: Repository<Room>,
     ) {}
 
-    async create(createRoomDto: CreateRoomDto): Promise<Room> {
-        const room = new Room();
-        room.name = createRoomDto.name;
+    async save(createRoomDto: CreateRoomDto): Promise<Room> {
+        let existing_room = await this.roomRepository.findOneBy({name: createRoomDto.name});
 
-        return this.roomRepository.save(room);
+        if (!existing_room) {
+            const new_room = new Room();
+            new_room.name = createRoomDto.name;
+
+            return this.roomRepository.save(new_room);
+        } else {
+            return existing_room;
+        }
     }
 
     async findAll(): Promise<Room[]> {
         return this.roomRepository.find();
-    }
-
-    async findById(id: number): Promise<Room> {
-        return this.roomRepository.findOneBy({id});
     }
 }

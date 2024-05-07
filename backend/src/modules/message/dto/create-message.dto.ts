@@ -1,12 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateMessageDto {
+export class PostMessageDto {
     @ApiProperty()
     content: string;
 
     @ApiProperty()
-    user_id: number;
+    user_name: string;
 
     @ApiProperty()
-    room_id: number;
+    room_name: string;
 }

@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Message } from "./message.entity";
-import { CreateMessageDto } from "./dto/create-message.dto";
+import { PostMessageDto } from "./dto/create-message.dto";
 import { Repository } from "typeorm";
-import { User } from "../user/user.entity";
 import { UserService } from "../user/user.service";
 import { RoomService } from "../room/room.service";
+import { CreateUserDto } from "../user/dto/create-user.dto";
+import { CreateRoomDto } from "../room/dto/create-room.dto";
 
 @Injectable()
 export class MessageService {
@@ -16,11 +17,11 @@ export class MessageService {
         private readonly roomService: RoomService,
     ) {}
 
-    async create(createMessageDto: CreateMessageDto): Promise<Message> {
+    async post(postMessageDto: PostMessageDto): Promise<Message> {
         const message = new Message();
-        message.content = createMessageDto.content;
-        message.user = await this.userService.findById(createMessageDto.user_id);
-        message.room = await this.roomService.findById(createMessageDto.room_id);
+        message.content = postMessageDto.content;
+        message.user = await this.userService.save(new CreateUserDto(postMessageDto.user_name));
+        message.room = await this.roomService.save(new CreateRoomDto(postMessageDto.room_name));
 
         return this.messageRepository.save(message)
     }
